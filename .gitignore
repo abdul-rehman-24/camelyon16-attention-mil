@@ -1,0 +1,14 @@
+*.tif
+*.svs
+*.npz
+*.parquet
+*.pt
+*.pth
+*.ckpt
+data/
+features/
+checkpoints/
+__pycache__/
+.ipynb_checkpoints/
+*.log
+credentials*
