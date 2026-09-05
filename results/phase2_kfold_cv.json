@@ -1,0 +1,42 @@
+{
+  "phase": "Phase 2 hardening \u2014 4-fold slide-level stratified CV",
+  "n_slides": 20,
+  "n_folds": 4,
+  "epochs_max": 30,
+  "early_stopping_patience": 8,
+  "lr_scheduler": "ReduceLROnPlateau(patience=3, factor=0.5)",
+  "results": {
+    "cnn_mil": {
+      "mean_val_auroc": 0.625,
+      "std_val_auroc": 0.1816,
+      "per_fold_auroc": [
+        0.6667,
+        0.6667,
+        0.8333,
+        0.3333
+      ]
+    },
+    "foundation_mil": {
+      "mean_val_auroc": 0.7083,
+      "std_val_auroc": 0.1382,
+      "per_fold_auroc": [
+        0.8333,
+        0.6667,
+        0.8333,
+        0.5
+      ]
+    },
+    "fusion_mil": {
+      "mean_val_auroc": 0.625,
+      "std_val_auroc": 0.1382,
+      "per_fold_auroc": [
+        0.8333,
+        0.5,
+        0.6667,
+        0.5
+      ]
+    }
+  },
+  "key_finding": "The earlier single-split AUROC=1.0 (all 3 models) was a lucky partition, not a stable result. 4-fold CV shows high fold-to-fold variance (std 0.14-0.18) and moderate means (0.625-0.708), consistent with genuinely small sample size (15 train / 5 val slides per fold) rather than a reliable model ranking. Foundation-MIL has the highest mean and lowest std, but overlapping confidence ranges with CNN-MIL and Fusion-MIL mean no model can be declared best at this scale.",
+  "caveat": "5 slides/fold val is still small; interpret std deviation as a reliability signal, not the AUROC mean alone. Full statistical confidence deferred to Phase 3 (270-slide official set)."
+}
