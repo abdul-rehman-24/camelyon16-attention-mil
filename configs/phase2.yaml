@@ -1,0 +1,26 @@
+phase2_slides:
+  reused_from_pilot:
+    tumor: [tumor_001, tumor_002, tumor_003]
+    normal: [normal_001, normal_002]
+  new_downloads:
+    tumor:
+      - {id: tumor_004, image: CAMELYON16/images/tumor_004.tif, annotation: CAMELYON16/annotations/tumor_004.xml, size_bytes: 2648896840}
+      - {id: tumor_005, image: CAMELYON16/images/tumor_005.tif, annotation: CAMELYON16/annotations/tumor_005.xml, size_bytes: 1467903916}
+      - {id: tumor_006, image: CAMELYON16/images/tumor_006.tif, annotation: CAMELYON16/annotations/tumor_006.xml, size_bytes: 2982752610}
+      - {id: tumor_007, image: CAMELYON16/images/tumor_007.tif, annotation: CAMELYON16/annotations/tumor_007.xml, size_bytes: 2361049492}
+      - {id: tumor_008, image: CAMELYON16/images/tumor_008.tif, annotation: CAMELYON16/annotations/tumor_008.xml, size_bytes: 2766996664}
+    normal:
+      - {id: normal_003, image: CAMELYON16/images/normal_003.tif, size_bytes: 2160066168}
+      - {id: normal_004, image: CAMELYON16/images/normal_004.tif, size_bytes: 990100952}
+      - {id: normal_005, image: CAMELYON16/images/normal_005.tif, size_bytes: 1524383906}
+      - {id: normal_006, image: CAMELYON16/images/normal_006.tif, size_bytes: 1222978786}
+      - {id: normal_007, image: CAMELYON16/images/normal_007.tif, size_bytes: 1628059710}
+      - {id: normal_008, image: CAMELYON16/images/normal_008.tif, size_bytes: 1207311652}
+      - {id: normal_009, image: CAMELYON16/images/normal_009.tif, size_bytes: 1648453324}
+      - {id: normal_010, image: CAMELYON16/images/normal_010.tif, size_bytes: 1530664068}
+      - {id: normal_011, image: CAMELYON16/images/normal_011.tif, size_bytes: 2420958520}
+      - {id: normal_012, image: CAMELYON16/images/normal_012.tif, size_bytes: 1369125372}
+total_slides: 20
+stratification_target: "~59% normal / 41% tumor, mirroring official 270-slide training set ratio (160/110)"
+selection_rule: "Section 5.1 extended — lowest-numbered slides beyond pilot, tumor slides confirmed non-empty annotation XML"
+download_strategy: "Batched in groups of 5 (Section 4.1) — download -> extract -> cache -> delete raw, per batch, to cap peak raw storage at ~10GB"

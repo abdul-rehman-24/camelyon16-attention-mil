@@ -1,0 +1,38 @@
+{
+  "phase": "Phase 2 \u2014 20-WSI validation batch",
+  "n_slides": 20,
+  "n_patches": 75906,
+  "train_slides": [
+    "normal_012",
+    "tumor_002",
+    "tumor_007",
+    "normal_009",
+    "tumor_006",
+    "normal_002",
+    "normal_001",
+    "tumor_005",
+    "normal_005",
+    "normal_003",
+    "tumor_001",
+    "normal_011",
+    "normal_006",
+    "tumor_004",
+    "normal_010"
+  ],
+  "val_slides": [
+    "normal_008",
+    "normal_004",
+    "tumor_008",
+    "tumor_003",
+    "normal_007"
+  ],
+  "leakage_check_passed": true,
+  "pos_weight_used": 1.5,
+  "epochs": 30,
+  "best_val_auroc": {
+    "cnn_mil": 1.0,
+    "foundation_mil": 0.8333333333333334,
+    "fusion_mil": 1.0
+  },
+  "caveat": "Val set is only 5 slides; AUROC here is directional/pipeline-validation signal only, not a statistically robust result. Full conclusions deferred to Phase 3 (270-slide official training set)."
+}
