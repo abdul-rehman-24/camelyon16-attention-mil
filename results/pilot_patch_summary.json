@@ -1,0 +1,57 @@
+{
+  "tumor_001": {
+    "mask_level": 5,
+    "mask_dims": [
+      3056,
+      6912
+    ],
+    "n_patches": 22531,
+    "patch_size": 256,
+    "target_level": 0,
+    "tissue_thresh": 0.5
+  },
+  "tumor_002": {
+    "mask_level": 5,
+    "mask_dims": [
+      3056,
+      6864
+    ],
+    "n_patches": 11846,
+    "patch_size": 256,
+    "target_level": 0,
+    "tissue_thresh": 0.5
+  },
+  "tumor_003": {
+    "mask_level": 5,
+    "mask_dims": [
+      3056,
+      6912
+    ],
+    "n_patches": 18860,
+    "patch_size": 256,
+    "target_level": 0,
+    "tissue_thresh": 0.5
+  },
+  "normal_001": {
+    "mask_level": 5,
+    "mask_dims": [
+      3056,
+      6912
+    ],
+    "n_patches": 5691,
+    "patch_size": 256,
+    "target_level": 0,
+    "tissue_thresh": 0.5
+  },
+  "normal_002": {
+    "mask_level": 5,
+    "mask_dims": [
+      3056,
+      6912
+    ],
+    "n_patches": 5563,
+    "patch_size": 256,
+    "target_level": 0,
+    "tissue_thresh": 0.5
+  }
+}
