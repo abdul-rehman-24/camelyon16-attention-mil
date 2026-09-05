@@ -1,0 +1,20 @@
+patch_size: 256
+target_level: 0          # 40x-equivalent, measured feasible on pilot
+tissue_threshold: 0.5
+mask_level: 5             # auto-selected (~32x downsample) by tissue_detection.py
+patch_cap_per_slide: 4000 # Section 6.2 contingency: pilot measured avg 12,898/slide,
+                          # far above the 2,000/slide planning estimate, so capped
+                          # rather than raising the 15GB Drive storage ceiling
+cap_selection: "random uniform subsample (seed=42) of tissue-passing coordinates when count > cap"
+measured_pilot_patch_counts:
+  tumor_001: 22531
+  tumor_002: 11846
+  tumor_003: 18860
+  normal_001: 5691
+  normal_002: 5563
+storage_estimate:
+  cnn_dim: 1280
+  foundation_dim: 1024
+  bytes_per_patch: 9240
+  full_270_slide_estimate_gb: 9.98
+  drive_budget_gb: 15

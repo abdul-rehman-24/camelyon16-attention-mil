@@ -1,0 +1,10 @@
+pilot_slides:
+  tumor:
+    - {id: tumor_001, image: CAMELYON16/images/tumor_001.tif, annotation: CAMELYON16/annotations/tumor_001.xml, size_bytes: 3264779514}
+    - {id: tumor_002, image: CAMELYON16/images/tumor_002.tif, annotation: CAMELYON16/annotations/tumor_002.xml, size_bytes: 1680307170}
+    - {id: tumor_003, image: CAMELYON16/images/tumor_003.tif, annotation: CAMELYON16/annotations/tumor_003.xml, size_bytes: 2352386364}
+  normal:
+    - {id: normal_001, image: CAMELYON16/images/normal_001.tif, size_bytes: 1255854916}
+    - {id: normal_002, image: CAMELYON16/images/normal_002.tif, size_bytes: 1570273574}
+selection_rule: "Section 5.1 — 3 lowest-numbered tumor_XXX.tif with non-empty annotation XML + 2 lowest-numbered normal_XXX.tif, from official 270-slide training set only"
+source: "s3://camelyon-dataset/CAMELYON16/ (public, no-sign-request, us-west-2, CC0)"
