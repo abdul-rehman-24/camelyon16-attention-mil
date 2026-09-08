@@ -1,0 +1,30 @@
+{
+  "description": "Consolidated summary of all key metrics across the project, for quick reference. Detailed per-analysis JSONs remain in results/.",
+  "phase3_4fold_cv": {
+    "cnn_mil": {"mean_val_auroc": 0.893, "std_val_auroc": 0.094},
+    "foundation_mil": {"mean_val_auroc": 0.962, "std_val_auroc": 0.045},
+    "fusion_mil": {"mean_val_auroc": 0.966, "std_val_auroc": 0.041}
+  },
+  "held_out_test": {
+    "model": "fusion_mil",
+    "n_slides": 20,
+    "auroc": 0.927,
+    "auprc": 0.931,
+    "accuracy": 0.900,
+    "precision": 1.000,
+    "specificity": 1.000,
+    "sensitivity_recall": 0.750,
+    "f1": 0.857
+  },
+  "ensemble": {
+    "best_weights": {"cnn": 0.0, "foundation": 0.0, "fusion": 1.0},
+    "best_val_auroc": 0.938,
+    "improvement_over_best_individual": 0.0
+  },
+  "explainability": {
+    "n_tumor_slides_analyzed": 10,
+    "n_slides_strong_localization": 8,
+    "mean_attention_mass_in_tumor_pct_strong_cases": "65-100%",
+    "documented_edge_cases": ["tumor_043 (sampling artifact)", "tumor_040 (genuine false negative)"]
+  }
+}

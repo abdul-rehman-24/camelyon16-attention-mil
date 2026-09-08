@@ -1,0 +1,88 @@
+decision: "Target reduced from full 270-slide official CAMELYON16 training set to 150 total slides
+  (62 tumor + 88 normal), for time/resource reasons. This is a documented subset, not the full
+  official training set -- all results in README.md and results/ should be read with this scope
+  in mind."
+
+total_target: 150
+tumor_target: 62
+normal_target: 88
+stratification_target: "~41% tumor / 59% normal, mirroring the official 270-slide set's ratio (111 tumor : 159 normal)"
+
+extraction_phases:
+  pilot:
+    n_slides: 5
+    slides: [tumor_001, tumor_002, tumor_003, normal_001, normal_002]
+    note: "Initial feasibility pilot (Section 5.1 selection rule) -- verified pipeline end-to-end
+      before scaling up."
+
+  phase2:
+    n_slides: 20
+    tumor: [tumor_001, tumor_002, tumor_003, tumor_004, tumor_005, tumor_006, tumor_007, tumor_008]
+    normal: [normal_001, normal_002, normal_003, normal_004, normal_005, normal_006, normal_007,
+             normal_008, normal_009, normal_010, normal_011, normal_012]
+    note: "First scale-up batch; used to run the initial (later found to be unreliable) single-split
+      training run, which prompted the 4-fold CV methodology used from Phase 3 onward."
+
+  phase3_session1:
+    n_slides: 15
+    slides: [tumor_009, tumor_010, tumor_011, tumor_012, tumor_013, tumor_014, tumor_015, tumor_016,
+             tumor_017, tumor_018, tumor_019, tumor_020, tumor_021, tumor_022, tumor_023]
+
+  phase3_batch1:
+    n_slides: 20
+    slides: [tumor_024, tumor_025, tumor_026, tumor_027, tumor_028, tumor_029, tumor_030, tumor_031,
+             tumor_032, tumor_033, tumor_034, tumor_035, tumor_036, tumor_037, tumor_038, tumor_039,
+             tumor_040, tumor_041, tumor_042, tumor_043]
+
+  phase3_batch2:
+    n_slides: 20
+    slides: [tumor_044, tumor_045, tumor_046, tumor_047, tumor_048, tumor_049, tumor_050, tumor_051,
+             tumor_052, tumor_053, tumor_054, tumor_055, tumor_056, tumor_057, tumor_058, tumor_059,
+             tumor_060, tumor_061, tumor_062, normal_013]
+
+  phase3_batch3:
+    n_slides: 20
+    slides: [normal_014, normal_015, normal_016, normal_017, normal_018, normal_019, normal_020,
+             normal_021, normal_022, normal_023, normal_024, normal_025, normal_026, normal_027,
+             normal_028, normal_029, normal_030, normal_031, normal_032, normal_033]
+
+  phase3_batch4:
+    n_slides: 20
+    slides: [normal_034, normal_035, normal_036, normal_037, normal_038, normal_039, normal_040,
+             normal_041, normal_042, normal_043, normal_044, normal_045, normal_046, normal_047,
+             normal_048, normal_049, normal_050, normal_051, normal_052, normal_053]
+
+  phase3_batch5:
+    n_slides: 20
+    slides: [normal_054, normal_055, normal_056, normal_057, normal_058, normal_059, normal_060,
+             normal_061, normal_062, normal_063, normal_064, normal_065, normal_066, normal_067,
+             normal_068, normal_069, normal_070, normal_071, normal_072, normal_073]
+
+  phase3_batch6:
+    n_slides: 15
+    slides: [normal_074, normal_075, normal_076, normal_077, normal_078, normal_079, normal_080,
+             normal_081, normal_082, normal_083, normal_084, normal_085, normal_087, normal_088,
+             normal_089]
+    note: "normal_086 was skipped (not present at this position when listing S3 sequentially at
+      time of extraction)."
+
+held_out_test_set:
+  n_slides: 20
+  tumor: [tumor_063, tumor_064, tumor_065, tumor_066, tumor_067, tumor_068, tumor_069, tumor_070]
+  normal: [normal_090, normal_091, normal_092, normal_093, normal_094, normal_095, normal_096,
+           normal_097, normal_098, normal_099, normal_100, normal_101]
+  note: "Genuinely untouched at all prior stages (training, validation, architecture selection,
+    ensemble/explainability analysis). Evaluated exactly once, after the final model checkpoint
+    was frozen. See results/heldout_test_results.json."
+
+selection_rule: "Sequential lowest-numbered untouched slides from the official 270-slide S3
+  listing at each extraction step, stratified tumor/normal to roughly match the overall dataset
+  ratio; tumor slides confirmed to have non-empty annotation XMLs."
+
+download_strategy: "Batched in groups of 5 (download -> tissue-detect -> extract -> cache ->
+  delete raw), per batch, to keep peak raw WSI storage under Kaggle's ~20GB working-storage limit."
+
+source: "s3://camelyon-dataset/CAMELYON16/ (public, no-sign-request, us-west-2, CC0 per bucket
+  license.txt)"
+
+total_slides_used: 170
