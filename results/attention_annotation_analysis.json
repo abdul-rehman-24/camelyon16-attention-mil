@@ -1,0 +1,51 @@
+{
+  "analysis": "Attention-vs-expert-annotation comparison (patch-center point-in-polygon test)",
+  "model": "Fusion-MIL (final, trained on 127 slides, val_auroc=0.9154)",
+  "n_val_tumor_slides_tested": 10,
+  "per_slide_results": {
+    "tumor_042": {
+      "pct_attention_mass_in_tumor": 99.8,
+      "pct_patches_in_tumor": 5.7
+    },
+    "tumor_045": {
+      "pct_attention_mass_in_tumor": 99.9,
+      "pct_patches_in_tumor": 0.9
+    },
+    "tumor_009": {
+      "pct_attention_mass_in_tumor": 99.9,
+      "pct_patches_in_tumor": 40.0
+    },
+    "tumor_061": {
+      "pct_attention_mass_in_tumor": 65.4,
+      "pct_patches_in_tumor": 2.4
+    },
+    "tumor_043": {
+      "pct_attention_mass_in_tumor": 0.0,
+      "pct_patches_in_tumor": 0.0,
+      "note": "Sampling artifact: annotation region very small (~3x3 patches), missed entirely by random 4000-patch cap subsample. Not a model failure."
+    },
+    "tumor_041": {
+      "pct_attention_mass_in_tumor": 94.8,
+      "pct_patches_in_tumor": 0.2
+    },
+    "tumor_049": {
+      "pct_attention_mass_in_tumor": 99.8,
+      "pct_patches_in_tumor": 0.1
+    },
+    "tumor_023": {
+      "pct_attention_mass_in_tumor": 98.7,
+      "pct_patches_in_tumor": 0.2
+    },
+    "tumor_026": {
+      "pct_attention_mass_in_tumor": 100.0,
+      "pct_patches_in_tumor": 20.7
+    },
+    "tumor_040": {
+      "pct_attention_mass_in_tumor": 0.0,
+      "pct_patches_in_tumor": 0.0,
+      "note": "Genuine false negative: model predicted benign (prob=0.0017) for this tumor slide. Attention scattered, low max weight -- model failed to detect this metastasis. Documented limitation."
+    }
+  },
+  "key_finding": "Excluding the one sampling artifact (tumor_043) and one genuine misclassification (tumor_040), 8 of 10 val-set tumor slides show strong attention concentration in expert-annotated tumor regions (65-100% of attention mass, despite tumor regions covering as little as 0.1-40% of sampled patches). This indicates the model has learned to localize malignant tissue without any pixel-level supervision -- a purely weakly-supervised (slide-label-only) result.",
+  "limitations": "1) Patch capping (4000/slide) can miss very small annotated regions entirely by chance, as seen in tumor_043 -- a genuine methodological limitation, not evidence against the model. 2) One true false negative (tumor_040) shows the model is not perfect; attention analysis on misclassified slides shows no localized signal, consistent with the model genuinely failing to detect that metastasis rather than detecting it with low confidence. 3) Analysis covers only the 10 tumor slides in one validation split, not the full dataset."
+}
