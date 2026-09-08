@@ -1,0 +1,44 @@
+{
+  "phase": "Phase 3 \u2014 150-slide 4-fold slide-level stratified CV",
+  "n_slides": 150,
+  "n_tumor": 62,
+  "n_normal": 88,
+  "n_folds": 4,
+  "epochs_max": 40,
+  "early_stopping_patience": 8,
+  "lr_scheduler": "ReduceLROnPlateau(patience=3, factor=0.5)",
+  "results": {
+    "cnn_mil": {
+      "mean_val_auroc": 0.8932,
+      "std_val_auroc": 0.0942,
+      "per_fold_auroc": [
+        0.7301,
+        0.9489,
+        0.9455,
+        0.9485
+      ]
+    },
+    "foundation_mil": {
+      "mean_val_auroc": 0.9617,
+      "std_val_auroc": 0.0453,
+      "per_fold_auroc": [
+        0.8892,
+        1.0,
+        1.0,
+        0.9576
+      ]
+    },
+    "fusion_mil": {
+      "mean_val_auroc": 0.9661,
+      "std_val_auroc": 0.0406,
+      "per_fold_auroc": [
+        0.9006,
+        1.0,
+        1.0,
+        0.9636
+      ]
+    }
+  },
+  "key_finding": "At 150-slide scale (vs the earlier 20-slide scale where all models were statistically indistinguishable, mean 0.625-0.708), a genuine performance separation emerges. CNN-MIL is clearly weakest (mean 0.893, std 0.094), particularly struggling on Fold 1 (0.730). Foundation-MIL (0.962 \u00b1 0.045) and Fusion-MIL (0.966 \u00b1 0.041) are close, with Fusion marginally ahead but within overlapping variance -- the two are not confidently distinguishable from each other, only from CNN-MIL. This is directionally consistent with the fusion hypothesis but the CNN-vs-foundation-pathway gap is the more robust finding here.",
+  "caveat": "150 slides is a documented subset (not the full 270-slide official CAMELYON16 training set). Val folds are ~37-38 slides each -- much more robust than the earlier 20-slide experiment, but final generalization should still be confirmed on a held-out test set before any deployment claim."
+}
