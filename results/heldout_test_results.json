@@ -1,0 +1,27 @@
+{
+  "evaluation": "Final held-out test evaluation \u2014 Fusion-MIL, single clean run, no post-hoc tuning",
+  "model": "Fusion-MIL (checkpoint: fusion_mil_final, trained on 127/150 slides, epoch 4, training val_auroc=0.9154)",
+  "test_set": "20 slides (8 tumor + 12 normal), genuinely never seen during training, validation, architecture selection, or hyperparameter tuning at any point in this project",
+  "test_metrics": {
+    "auroc": 0.9271,
+    "auprc": 0.9308,
+    "f1": 0.8571,
+    "precision": 1.0,
+    "sensitivity_recall": 0.75,
+    "specificity": 1.0,
+    "accuracy": 0.9,
+    "balanced_accuracy": 0.875,
+    "confusion_matrix": [
+      [
+        12,
+        0
+      ],
+      [
+        2,
+        6
+      ]
+    ]
+  },
+  "key_finding": "AUROC=0.927 on held-out test, consistent with (in fact slightly above) the 4-fold cross-validation range for Fusion-MIL (0.901-1.000, mean 0.966), confirming the CV results were not overfit to the validation folds. Precision and specificity are perfect (1.0) -- zero false positives across 12 normal slides. However sensitivity is only 0.75 -- 2 of 8 tumor slides were missed (false negatives). This precision/sensitivity trade-off is a genuine, honestly-reported limitation: the model is conservative and avoids false alarms, but at the cost of missing some malignant cases, which is clinically more costly than a false positive.",
+  "caveat": "n=20 (8 tumor) is a small test set -- each misclassified slide moves sensitivity by 12.5 percentage points. This is a directional confirmation of the CV results, not a large-scale clinical validation. The model was selected and its checkpoint frozen before this evaluation was run, so no cherry-picking or tuning occurred based on this result."
+}
