@@ -142,3 +142,35 @@ CAMELYON16 dataset: Bejnordi et al., *Diagnostic Assessment of Deep Learning Alg
 Detection of Lymph Node Metastases in Women With Breast Cancer*, JAMA 2017.
 Gated Attention MIL: Ilse et al., *Attention-based Deep Multiple Instance Learning*, ICML 2018.
 Phikon-v2: Owkin, pathology foundation model (`owkin/phikon-v2`).
+
+
+### Held-out test evaluation (final result)
+
+After all model selection, cross-validation, and hyperparameter decisions were finalized, the
+frozen Fusion-MIL checkpoint (trained on 127/150 slides, val_auroc=0.9154) was evaluated **once**
+on 20 slides (8 tumor + 12 normal) that had never been seen at any prior stage — not in training,
+validation, architecture selection, or the ensemble/explainability analyses above.
+
+| Metric | Value |
+|---|---|
+| AUROC | 0.927 |
+| AUPRC | 0.931 |
+| Accuracy | 0.900 |
+| Precision | 1.000 |
+| Specificity | 1.000 |
+| Sensitivity (Recall) | 0.750 |
+| F1 | 0.857 |
+
+Confusion matrix: `[[12, 0], [2, 6]]` (12/12 normal slides correct, 6/8 tumor slides correct, 2 missed).
+
+**Finding:** the held-out AUROC (0.927) falls within — in fact slightly above — the 4-fold CV range
+for Fusion-MIL (0.901–1.000, mean 0.966), confirming the cross-validation results generalize and
+were not an artifact of the validation folds. The model achieved zero false positives (perfect
+precision and specificity) but missed 2 of 8 tumor slides (sensitivity 0.75). This is reported as
+an honest limitation rather than smoothed over: in a clinical context, missed malignancies are
+more costly than false alarms, so this precision/sensitivity trade-off would need to be addressed
+(e.g. via threshold tuning or more training data) before any deployment-oriented claim.
+
+*Note on sample size:* with only 8 tumor slides in the test set, each misclassification shifts
+sensitivity by 12.5 percentage points — this is a directional confirmation at the current data
+scale, not a large-scale clinical validation. Full results: `results/heldout_test_results.json`.
