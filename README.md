@@ -79,6 +79,26 @@ mass was compared against expert-annotated tumor polygons (patch-center point-in
 
 Full results: `results/attention_annotation_analysis.json`.
 
+### Ensemble analysis
+
+A validation-only weighted ensemble search across all three models (CNN-MIL, Foundation-MIL,
+Fusion-MIL — same 127/23 split as above) was also run:
+
+| | Val AUROC |
+|---|---|
+| CNN-MIL (standalone) | 0.800 |
+| Foundation-MIL (standalone) | 0.885 |
+| Fusion-MIL (standalone) | 0.938 |
+| **Best weighted ensemble** | **0.938** (weights: 0% CNN, 0% Foundation, 100% Fusion) |
+
+**Finding:** the ensemble search collapsed to 100% weight on Fusion-MIL, giving zero improvement
+over Fusion-MIL alone — mirroring the same result seen in the earlier BreaKHis (V1) project. The
+interpretation is that Fusion-MIL, having already internally combined CNN and foundation-model
+features, leaves no complementary signal in the standalone models for an outer ensemble to
+exploit. (Note: weights were searched and evaluated on the same validation set, so this is a
+directional finding, not an unbiased AUROC estimate — see `results/ensemble_analysis.json`.)
+
+
 ## Repository structure
 configs/ pilot/phase2/phase3 slide-selection configs, patching parameters
 src/data/ WSI tissue detection, patch coordinate extraction, MIL bag construction, splits
