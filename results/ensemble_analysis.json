@@ -1,0 +1,18 @@
+{
+  "analysis": "Weighted ensemble search (CNN-MIL, Foundation-MIL, Fusion-MIL) on validation set",
+  "n_val_slides": 23,
+  "individual_val_auroc": {
+    "cnn_mil": 0.8,
+    "foundation_mil": 0.8846,
+    "fusion_mil": 0.9385
+  },
+  "best_ensemble_weights": {
+    "cnn": 0.0,
+    "foundation": 0.0,
+    "fusion": 1.0
+  },
+  "best_ensemble_auroc": 0.9385,
+  "improvement_over_best_individual": 0.0,
+  "key_finding": "Weighted ensemble search assigned 100% weight to Fusion-MIL and 0% to both CNN-MIL and Foundation-MIL, yielding no improvement over Fusion-MIL alone (AUROC unchanged at 0.9385). This mirrors the same result observed in the earlier BreaKHis (V1) project, where ensemble search similarly collapsed to 100% weight on a single model. The interpretation is that Fusion-MIL, having already combined both CNN and foundation-model features internally, leaves no complementary signal in the standalone CNN-MIL or Foundation-MIL predictions for an outer ensemble to exploit.",
+  "caveat": "Ensemble weights were searched AND evaluated on the same 23-slide validation set, which is optimistic/circular by construction (no separate held-out set was used for weight selection). The result should be read as 'ensembling offers no benefit in this setup' rather than as a precise, unbiased AUROC estimate for any of the individual or ensembled models."
+}
