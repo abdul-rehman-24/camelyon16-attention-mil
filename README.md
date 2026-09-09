@@ -131,6 +131,43 @@ features, leaves no complementary signal in the standalone models for an outer e
 exploit. (Note: weights were searched and evaluated on the same validation set, so this is a
 directional finding, not an unbiased AUROC estimate — see `results/ensemble_analysis.json`.)
 
+### Extended ensemble analysis: stacking
+
+Beyond the simple weighted-average ensemble above, a logistic-regression stacking meta-learner
+was also tested (same 127/23 split, fresh seeded models for internal consistency):
+
+| Method | Val AUROC |
+|---|---|
+| Fusion-MIL (standalone) | 0.954 |
+| Weighted-average ensemble | 0.954 (100% Fusion-MIL) |
+| **Stacking (logistic regression)** | **0.885** |
+
+**Finding:** stacking *underperformed* Fusion-MIL alone, giving a second, independent piece of
+evidence (beyond the weighted-average result) that ensembling does not help in this setup. The
+meta-learner assigned positive weight to the weaker CNN-MIL and Foundation-MIL predictions,
+diluting Fusion-MIL's stronger signal — likely compounded by overfitting a 3-parameter model on
+only 23 validation slides. Full results: `results/ensemble_analysis_v2.json`.
+
+### Dimensionality reduction (PCA)
+
+To test whether the cached patch features could be compressed without meaningful accuracy loss,
+PCA was applied independently to the CNN (1280d) and Foundation (1024d) features, reducing each
+to 128 dimensions (256d combined, ~89% size reduction), and Fusion-MIL was retrained from scratch
+on the reduced features.
+
+| | Dimensions | Val AUROC |
+|---|---|---|
+| Full-dimensional Fusion-MIL | 2304d (1280+1024) | 0.954 |
+| PCA-reduced Fusion-MIL | 256d (128+128) | 0.862 |
+
+PCA retained 89.7% of CNN feature variance and 83.0% of Foundation feature variance, and training
+was ~3.3x faster per epoch. However, validation AUROC dropped by 9.2 points. **Finding:** this is
+an honest trade-off, not a win — the discarded 10-17% of variance evidently carried diagnostically
+useful signal, so unsupervised PCA compression is not recommended here without further tuning
+(e.g. retaining more components, or using a supervised reduction method instead). Full results:
+`results/pca_dimensionality_reduction.json`.
+
+
 ## Repository structure
 
   configs/ pilot/phase2/phase3 slide-selection configs, patching parameters
