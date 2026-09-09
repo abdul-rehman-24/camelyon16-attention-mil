@@ -1,0 +1,27 @@
+{
+  "analysis": "Extended ensemble analysis: weighted-average grid search + logistic-regression stacking, on fresh seeded models (127/23 split)",
+  "individual_val_auroc": {
+    "cnn_mil": 0.8231,
+    "foundation_mil": 0.8846,
+    "fusion_mil": 0.9538
+  },
+  "weighted_average_ensemble": {
+    "best_weights": {
+      "cnn": 0.0,
+      "foundation": 0.0,
+      "fusion": 1.0
+    },
+    "auroc": 0.9538
+  },
+  "stacking_ensemble": {
+    "method": "Logistic regression meta-learner",
+    "auroc": 0.8846,
+    "learned_coefficients": {
+      "cnn": 0.577,
+      "foundation": 1.314,
+      "fusion": 1.291
+    }
+  },
+  "key_finding": "Two independent ensemble strategies were tested. Weighted-average grid search assigned 100% weight to Fusion-MIL, giving no improvement (0.9538 unchanged). Logistic-regression stacking performed WORSE than Fusion-MIL alone (0.8846 vs 0.9538) -- the meta-learner's positive coefficients on the weaker CNN-MIL and Foundation-MIL predictions diluted Fusion-MIL's stronger, more confident predictions. This is consistent, cross-method evidence that ensembling does not help in this setup: Fusion-MIL already internally combines CNN and foundation-model signal, leaving no complementary information for an external ensemble (of either kind) to exploit.",
+  "caveat": "Both ensemble methods were fit AND evaluated on the same 23-slide validation set (no separate ensemble-validation split), which is optimistic/circular by construction, especially for the stacking method with 3 learnable parameters on n=23. The comparative finding (stacking underperforms weighted-average, both underperform or match the single best model) is more trustworthy than any individual AUROC number here."
+}
