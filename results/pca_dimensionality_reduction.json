@@ -1,0 +1,30 @@
+{
+  "analysis": "PCA dimensionality reduction on CNN and Foundation-model patch features, retrained Fusion-MIL",
+  "original_dims": {
+    "cnn": 1280,
+    "foundation": 1024,
+    "total": 2304
+  },
+  "reduced_dims": {
+    "cnn": 128,
+    "foundation": 128,
+    "total": 256
+  },
+  "size_reduction_pct": 88.9,
+  "explained_variance": {
+    "cnn_pca": 0.897,
+    "foundation_pca": 0.83
+  },
+  "fusion_mil_val_auroc": {
+    "full_dim": 0.9538,
+    "pca_reduced_256d": 0.8615,
+    "delta": -0.0923
+  },
+  "training_speed": {
+    "full_dim_sec_per_epoch": 2.0,
+    "pca_reduced_sec_per_epoch": 0.6,
+    "speedup": "~3.3x"
+  },
+  "key_finding": "Reducing patch-level feature dimensionality by ~89% (2304d -> 256d combined) via PCA retained 83-90% of feature variance and gave a ~3.3x training speedup, but cost 9.2 percentage points of validation AUROC (0.954 -> 0.862). This is an honest trade-off: the discarded 10-17% of variance evidently carried diagnostically useful signal for this task, so PCA-based compression is not recommended here without further tuning (e.g. a higher retained-dimension count, or supervised dimensionality reduction instead of unsupervised PCA).",
+  "caveat": "Single run, same 127/23 split as other Fusion-MIL results in this project. Not cross-validated at this reduced dimensionality -- the AUROC drop should be treated as directional, though the magnitude (9+ points) is large enough to be a genuine trade-off rather than noise."
+}
