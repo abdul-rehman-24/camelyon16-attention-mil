@@ -1,11 +1,10 @@
-"""Validation-only weighted ensemble search across CNN-MIL, Foundation-MIL, Fusion-MIL."""
+"""Validation-only weighted ensemble search + stacking meta-learner across CNN-MIL, Foundation-MIL, Fusion-MIL."""
 import numpy as np
 import torch
 from sklearn.metrics import roc_auc_score
 
 
 def get_val_probs(model, dataset, mode, device):
-    """Returns (probs, labels) arrays for every bag in the dataset."""
     model.eval()
     probs, labels = [], []
     with torch.no_grad():
@@ -24,7 +23,6 @@ def get_val_probs(model, dataset, mode, device):
 
 
 def search_ensemble_weights(val_probs_dict, val_labels, step=0.05):
-    """val_probs_dict: {"cnn": array, "foundation": array, "fusion": array}. Grid search on validation only."""
     keys = list(val_probs_dict.keys())
     assert len(keys) == 3
     k1, k2, k3 = keys
