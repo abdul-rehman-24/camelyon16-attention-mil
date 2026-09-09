@@ -1,4 +1,4 @@
-# CAMELYON16 Attention-MIL: Multi-Modal Weakly-Supervised Breast Cancer Metastasis Detection
+# Explainable Attention-MIL for Whole-Slide Breast Cancer Detection
 
 Attention-based Multiple Instance Learning (MIL) for whole-slide breast cancer histopathology
 classification, using the official [CAMELYON16](https://camelyon16.grand-challenge.org/) dataset
@@ -148,6 +148,10 @@ meta-learner assigned positive weight to the weaker CNN-MIL and Foundation-MIL p
 diluting Fusion-MIL's stronger signal — likely compounded by overfitting a 3-parameter model on
 only 23 validation slides. Full results: `results/ensemble_analysis_v2.json`.
 
+*Note on the value change (0.938 → 0.954) between the two ensemble analyses above:* these come
+from separately-trained runs of the same architecture (see Known limitations — reproducibility,
+below), not a correction of an error. Both are genuine training runs on the same 127/23 split.
+
 ### Dimensionality reduction (PCA)
 
 To test whether the cached patch features could be compressed without meaningful accuracy loss,
@@ -167,10 +171,9 @@ useful signal, so unsupervised PCA compression is not recommended here without f
 (e.g. retaining more components, or using a supervised reduction method instead). Full results:
 `results/pca_dimensionality_reduction.json`.
 
-
 ## Repository structure
 
-  configs/ pilot/phase2/phase3 slide-selection configs, patching parameters
+configs/ pilot/phase2/phase3 slide-selection configs, patching parameters
 src/data/ WSI tissue detection, patch coordinate extraction, MIL bag construction, splits
 src/features/ CNN and Phikon-v2 patch encoders, embedding cache I/O
 src/models/ Gated Attention MIL (single-branch and fusion variants)
@@ -178,7 +181,8 @@ src/training/ Training loop (early stopping + LR scheduling), k-fold CV driver, 
 src/explainability/ Annotation XML parsing, attention-vs-annotation comparison
 results/ All metrics, CV summaries, held-out test, and explainability results as JSON
 docs/ Session resume guides for multi-session Kaggle extraction runs
-
+tests/ Unit tests for model shapes, gradient flow, and split-leakage checks
+scripts/ CLI entrypoint for training a single model from a cached embedding set
 
 
 ## Reproducing this work
@@ -190,7 +194,8 @@ To reproduce:
 2. Download slides per `configs/phase3_plan.yaml` from the public S3 bucket (no AWS credentials needed)
 3. Run tissue detection + patching (`src/data/`) and feature extraction (`src/features/`) to
    rebuild the embedding cache
-4. Train with `src/training/train_mil.py` / `src/training/kfold_cv.py`
+4. Train with `src/training/train_mil.py` / `src/training/kfold_cv.py`, or via the CLI wrapper:
+   `python scripts/run_training.py --cache_path <path> --model fusion --epochs 40 --ckpt_dir <dir>`
 
 Extraction was run across multiple Kaggle sessions in small batches (5–20 slides at a time,
 with immediate raw-file deletion after caching) to stay within Kaggle's working-storage limits;
@@ -202,12 +207,22 @@ see `docs/SESSION_RESUME.md` for the exact multi-session protocol used.
   training set); held-out test set is a further 20-slide subset
 - Held-out test sensitivity (0.75, 2/8 tumor slides missed) is a genuine limitation at the
   current data scale — see Held-out test evaluation above
+- **Training reproducibility is partial, not full:** `torch.manual_seed()` is set, but the full
+  determinism stack (`random.seed`, `numpy.random.seed`, `torch.cuda.manual_seed_all`,
+  `torch.use_deterministic_algorithms`) is not consistently applied across all training runs in
+  this project. As a result, re-running training on the same split can yield noticeably different
+  val AUROC for the same architecture (observed: 0.885–0.954 for Fusion-MIL across separate runs
+  on the same 127/23 split). The headline 4-fold CV and held-out test results are unaffected by
+  this (they are single, specific, reported runs), but any attempt to exactly reproduce a specific
+  intermediate number in this README from scratch may not match precisely. This mirrors a similar
+  finding documented in the earlier BreaKHis (V1) project.
 - Grad-CAM / pixel-level saliency not implemented for this project (attention-weight analysis
   only); attention reflects the model's internal weighting, not confirmed biological importance
   beyond the tumor/normal correlation shown above
 - Patch capping (4,000/slide) can occasionally miss small annotated regions entirely by chance,
   as documented in the explainability analysis
-- Ensemble weights were searched and evaluated on the same validation set (see caveat above)
+- Ensemble and stacking weights were searched/fit and evaluated on the same validation set (see
+  caveats above)
 
 ## Acknowledgments
 
